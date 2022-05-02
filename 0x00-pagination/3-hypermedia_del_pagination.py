@@ -42,21 +42,22 @@ class Server:
         '''
         returns paginated data that recognizes deletion
         '''
-        d = self.indexed_dataset()
-        assert index < len(d) and (
-            index + page_size) < len(d)
-        next = index + page_size
+        assert isinstance(index, int)
+        assert isinstance(page_size, int)
+        csv_file = self.indexed_dataset()
+        csv_size = len(csv_file)
+        assert 0 <= index < csv_size
         data = []
-        for idx in range(index, index + page_size):
-            if not self.indexed_dataset().get(idx):
-                next += 1
-            data.append(self.indexed_dataset().get(idx))
-        try:
-            return {
-                'index': index,
-                'data': data,
-                'page_size': page_size,
-                'next_index': next
-            }
-        except IndexError:
-            raise IndexError
+        next_page = index
+        for _ in range(page_size):
+            while not csv_file.get(next_page):
+                next_page += 1
+            data.append(csv_file.get(next_page))
+            next_page += 1
+        return {
+            "index": index,
+            "page_size": page_size,
+            "next_index": next_page,
+            "data": data,
+            "page_size": page_size
+        }
