@@ -48,7 +48,7 @@ class Server:
             return []
         return data[tpl[0]: tpl[1]]
 
-    def next(self, page=1, page_size=1):
+    def next(self, page: int = 1, page_size: int = 1):
         '''
         returns next page or None
         '''
@@ -56,6 +56,7 @@ class Server:
         data = self.dataset()
         try:
             next_data = data[tpl[0]: tpl[1]]
+
             if len(next_data) > 0:
                 return page + 1
             else:
@@ -63,20 +64,13 @@ class Server:
         except IndexError:
             return None
 
-    def prev(self, page=1, page_size=1):
+    def prev(self, page: int = 1, page_size: int = 1):
         '''
         returns prev page or None
         '''
-        tpl = index_range(page=page - 2, page_size=page_size)
-        data = self.dataset()
-        try:
-            next_data = data[tpl[0]: tpl[1]]
-            if len(next_data) > 0:
-                return page - 1
-            else:
-                return None
-        except IndexError:
+        if page - 1 <= 0:
             return None
+        return page - 1
 
     def get_hyper(self, page: int = 1, page_size: int = 10) -> List[List]:
         '''
@@ -87,7 +81,7 @@ class Server:
             'page_size': len(data),
             'page': page,
             'data': data,
-            'next_page':  self.next(page=page),
-            'prev_page': self.prev(page=page),
-            'total_pages': len(self.dataset()),
+            'next_page':  self.next(page=page, page_size=page_size),
+            'prev_page': self.prev(page=page, page_size=page_size),
+            'total_pages': math.ceil(len(self.dataset()) / page_size),
         }
