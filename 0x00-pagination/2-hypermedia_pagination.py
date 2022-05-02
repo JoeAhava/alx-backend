@@ -52,9 +52,10 @@ class Server:
         '''
         returns next page or None
         '''
+        tpl = index_range(page=page + 1, page_size=page_size)
         data = self.dataset()
         try:
-            next_data = data[page: page_size]
+            next_data = data[tpl[0]: tpl[1]]
             if len(next_data) > 0:
                 return page + 1
             else:
@@ -66,9 +67,10 @@ class Server:
         '''
         returns prev page or None
         '''
+        tpl = index_range(page=page - 2, page_size=page_size)
         data = self.dataset()
         try:
-            next_data = data[page - 2: page_size]
+            next_data = data[tpl[0]: tpl[1]]
             if len(next_data) > 0:
                 return page - 1
             else:
