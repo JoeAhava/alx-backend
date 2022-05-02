@@ -45,12 +45,18 @@ class Server:
         d = self.indexed_dataset()
         assert index < len(d) and (
             index + page_size) < len(d)
+        next = index + page_size
+        data = []
+        for idx in range(index, index + page_size):
+            if not self.indexed_dataset().get(idx):
+                next += 1
+            data.append(self.indexed_dataset().get(idx))
         try:
             return {
                 'index': index,
-                'data': [d.get(i) for i in range(index, index + page_size)],
+                'data': data,
                 'page_size': page_size,
-                'next_index': index + page_size
+                'next_index': next
             }
         except IndexError:
             raise IndexError
