@@ -24,12 +24,14 @@ class FIFOCache(BaseCaching):
         puts item in the cache
         '''
         if key and item:
-            self.cache_data[key] = item
-            if len(self.cache_data) > self.MAX_ITEMS:
-                print("DISCARD: {}".format(
-                    list(self.cache_data.keys())[0]))
+            if key in self.cache_data.keys():
+                self.cache_data[key] = item
+            elif len(self.cache_data.keys()) < self.MAX_ITEMS:
+                self.cache_data[key] = item
+            else:
+                self.cache_data[key] = item
+                print(f"DISCARD: {list(self.cache_data.keys())[0]}")
                 self.cache_data.pop(list(self.cache_data.keys())[0])
-        return
 
     def get(self, key):
         '''
