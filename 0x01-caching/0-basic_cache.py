@@ -30,11 +30,4 @@ class BasicCache(BaseCaching):
         '''
         get item from cache
         '''
-        result = None
-        if key is None:
-            return result
-        try:
-            result = self.cache_data[key]
-        except KeyError:
-            result = None
-        return result
+        return self.cache_data.get(key, None)

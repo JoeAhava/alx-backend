@@ -23,25 +23,16 @@ class FIFOCache(BaseCaching):
         '''
         puts item in the cache
         '''
-        if key is None or item is None:
-            return
-        # if self.cache_data.get(key, None) is not None:
-        #     self.cache_data[key] = item
-        #     return
-        self.cache_data[key] = item
-        if len(self.cache_data) > self.MAX_ITEMS:
-            print('DISCARD:  ', list(self.cache_data.keys())[0])
-            del self.cache_data[list(self.cache_data.keys())[0]]
+        if key and item:
+            self.cache_data[key] = item
+            if len(self.cache_data) > self.MAX_ITEMS:
+                print("DISCARD: {}".format(
+                    key, list(self.cache_data.keys())[0]))
+                del self.cache_data[list(self.cache_data.keys())[0]]
+        return
 
     def get(self, key):
         '''
         get item from cache
         '''
-        result = None
-        if key is None:
-            return result
-        try:
-            result = self.cache_data[key]
-        except KeyError:
-            result = None
-        return result
+        return self.cache_data.get(key, None)
